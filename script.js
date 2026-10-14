@@ -67,7 +67,10 @@ function renderRows(rows) {
       if (!value || isImageLike(key, value)) return;
 
       const line = document.createElement('p');
-      line.innerHTML = `<strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}`;
+      const label = document.createElement('strong');
+      label.textContent = `${key}: `;
+      line.appendChild(label);
+      line.append(document.createTextNode(value));
       card.appendChild(line);
     });
 
@@ -105,13 +108,4 @@ function isImageLike(key, value) {
 
   const valueLower = String(value).toLowerCase();
   return /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(valueLower);
-}
-
-function escapeHtml(value) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
 }
