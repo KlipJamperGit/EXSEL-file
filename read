@@ -3,3 +3,4 @@
 3. Натисніть «Завантажити exeshnik», щоб зберегти файл для другого сайту.
 4. Другий сайт: відкрийте /home/runner/work/EXSEL-file/EXSEL-file/second.html
 5. Завантажте файл news.exeshnik — він відобразиться як газета.
+6. Щоб запустити обидва сайти одразу у Windows, запустіть /home/runner/work/EXSEL-file/EXSEL-file/run-both-sites.bat
