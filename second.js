@@ -1,20 +1,73 @@
+const STORAGE_KEY = 'excelNewsPayloadV1';
+
 const fileInput = document.getElementById('exeshnikFile');
 const newsGrid = document.getElementById('newsGrid');
+const autoStatus = document.getElementById('autoStatus');
+
+loadStoredPayload();
 
 fileInput.addEventListener('change', async (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
+
+  const lowerName = file.name.toLowerCase();
+
+  if (lowerName.endsWith('.xlsx') || lowerName.endsWith('.xls')) {
+    const reader = new FileReader();
+    reader.onload = ({ target }) => {
+      try {
+        const buffer = target?.result;
+        const workbook = XLSX.read(buffer, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+        const payload = { createdAt: new Date().toISOString(), rows };
+        savePayload(payload);
+        autoStatus.textContent = `Завантажено XLSX: ${rows.length} записів`;
+        renderRows(rows);
+      } catch {
+        newsGrid.innerHTML = '<article class="empty-state">Не вдалося прочитати XLSX-файл.</article>';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+    return;
+  }
 
   const text = await file.text();
 
   try {
     const payload = JSON.parse(text);
     const rows = Array.isArray(payload?.rows) ? payload.rows : [];
+    savePayload(payload);
+    autoStatus.textContent = `Завантажено exeshnik: ${rows.length} записів`;
     renderRows(rows);
   } catch {
-    newsGrid.innerHTML = '<article class="empty-state">Невірний exeshnik-файл.</article>';
+    newsGrid.innerHTML = '<article class="empty-state">Невірний файл.</article>';
   }
 });
+
+function loadStoredPayload() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+
+    const payload = JSON.parse(raw);
+    const rows = Array.isArray(payload?.rows) ? payload.rows : [];
+    if (!rows.length) return;
+
+    autoStatus.textContent = `Автоматично відкрито з сайту 1: ${rows.length} записів`;
+    renderRows(rows);
+  } catch {
+    // ignore bad storage data
+  }
+}
+
+function savePayload(payload) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  } catch {
+    // ignore storage errors
+  }
+}
 
 function renderRows(rows) {
   newsGrid.innerHTML = '';
@@ -68,9 +121,7 @@ function renderRows(rows) {
 
 function findKey(keys, candidates) {
   const lowered = keys.map((key) => ({ original: key, lowered: key.toLowerCase() }));
-  const match = lowered.find(({ lowered }) =>
-    candidates.some((candidate) => lowered.includes(candidate))
-  );
+  const match = lowered.find(({ lowered }) => candidates.some((candidate) => lowered.includes(candidate)));
   return match?.original;
 }
 

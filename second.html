@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Second Newspaper Site</title>
   <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <header class="hero">
-    <h1>Second Site: Exeshnik → Газета</h1>
-    <p>Завантаж exeshnik-файл із першого сайту та переглянь як газету.</p>
+    <h1>Site 2: Газетний перегляд</h1>
+    <p>Дані з сайту 1 відкриваються моментально. Можна також додати .xlsx або .exeshnik вручну.</p>
   </header>
 
   <main>
     <section class="controls">
-      <label for="exeshnikFile" class="file-label">Оберіть .exeshnik файл</label>
-      <input id="exeshnikFile" type="file" accept=".exeshnik,.json" />
-      <p class="hint">Файл має бути згенерований кнопкою «Завантажити exeshnik» на першому сайті.</p>
+      <label for="exeshnikFile" class="file-label">Вибрати файл (.xlsx/.xls/.exeshnik/.json)</label>
+      <input id="exeshnikFile" type="file" accept=".xlsx,.xls,.exeshnik,.json" />
+      <p id="autoStatus" class="hint">Очікуються дані.</p>
     </section>
 
     <section id="newsGrid" class="news-grid">

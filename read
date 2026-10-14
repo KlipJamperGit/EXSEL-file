@@ -1,6 +1,7 @@
 1. Перший сайт: відкрийте /home/runner/work/EXSEL-file/EXSEL-file/index.html
-2. Завантажте Excel (.xlsx/.xls) — дані покажуться як газетні картки без відображення картинок.
-3. Натисніть «Завантажити exeshnik», щоб зберегти файл для другого сайту.
-4. Другий сайт: відкрийте /home/runner/work/EXSEL-file/EXSEL-file/second.html
-5. Завантажте файл news.exeshnik — він відобразиться як газета.
-6. Щоб запустити обидва сайти одразу у Windows, запустіть /home/runner/work/EXSEL-file/EXSEL-file/run-both-sites.bat
+2. На сайті 1 додайте Excel (.xlsx/.xls) — сторінка виглядає як файловий менеджер і одразу читає дані.
+3. Натисніть «Відкрити на сайті 2», щоб моментально передати дані на другий сайт у газетному стилі.
+4. За потреби натисніть «Завантажити exeshnik», щоб зберегти файл для ручного імпорту.
+5. Другий сайт: відкрийте /home/runner/work/EXSEL-file/EXSEL-file/second.html
+6. Сайт 2 автоматично підхоплює дані з сайту 1, а також підтримує ручне завантаження .xlsx/.xls/.exeshnik/.json.
+7. Щоб запустити обидва сайти одразу у Windows, запустіть /home/runner/work/EXSEL-file/EXSEL-file/run-both-sites.bat
