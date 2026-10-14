@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Second Newspaper Site</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1>Second Site: Exeshnik → Газета</h1>
+    <p>Завантаж exeshnik-файл із першого сайту та переглянь як газету.</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <label for="exeshnikFile" class="file-label">Оберіть .exeshnik файл</label>
+      <input id="exeshnikFile" type="file" accept=".exeshnik,.json" />
+      <p class="hint">Файл має бути згенерований кнопкою «Завантажити exeshnik» на першому сайті.</p>
+    </section>
+
+    <section id="newsGrid" class="news-grid">
+      <article class="empty-state">Дані ще не завантажено.</article>
+    </section>
+  </main>
+
+  <script src="./second.js"></script>
+</body>
+</html>

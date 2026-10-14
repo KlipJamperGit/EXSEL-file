@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Newspaper Viewer</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <h1>Excel → Онлайн-газета</h1>
+    <p>Завантаж Excel-файл, переглянь як газету і збережи у форматі exeshnik.</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <label for="excelFile" class="file-label">Оберіть .xlsx/.xls файл</label>
+      <input id="excelFile" type="file" accept=".xlsx,.xls" />
+      <button id="exportBtn" class="action-btn" type="button" disabled>Завантажити exeshnik</button>
+      <p class="hint">Порада: перший рядок має містити назви колонок (наприклад: Назва, Сайт, Опис).</p>
+      <p class="hint">Другий сайт: <a href="./second.html">second.html</a></p>
+    </section>
+
+    <section id="newsGrid" class="news-grid">
+      <article class="empty-state">Дані ще не завантажено.</article>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
