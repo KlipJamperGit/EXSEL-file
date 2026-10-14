@@ -3,23 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excel Newspaper Viewer</title>
+  <title>Excel File Manager</title>
   <link rel="stylesheet" href="./styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <header class="hero">
-    <h1>Excel → Онлайн-газета</h1>
-    <p>Завантаж Excel-файл, переглянь як газету і збережи у форматі exeshnik.</p>
+    <h1>Site 1: XLSX File Manager</h1>
+    <p>Завантаж XLSX як у файловому менеджері і відкрий його на другому сайті.</p>
   </header>
 
   <main>
-    <section class="controls">
-      <label for="excelFile" class="file-label">Оберіть .xlsx/.xls файл</label>
-      <input id="excelFile" type="file" accept=".xlsx,.xls" />
-      <button id="exportBtn" class="action-btn" type="button" disabled>Завантажити exeshnik</button>
-      <p class="hint">Порада: перший рядок має містити назви колонок (наприклад: Назва, Сайт, Опис).</p>
-      <p class="hint">Другий сайт: <a href="./second.html">second.html</a></p>
+    <section class="controls file-manager">
+      <div class="toolbar">
+        <label for="excelFile" class="file-label">Додати .xlsx/.xls</label>
+        <input id="excelFile" type="file" accept=".xlsx,.xls" />
+        <button id="openSecondBtn" class="action-btn" type="button" disabled>Відкрити на сайті 2</button>
+        <button id="exportBtn" class="action-btn" type="button" disabled>Завантажити exeshnik</button>
+      </div>
+
+      <div class="file-list-wrap">
+        <table class="file-list">
+          <thead>
+            <tr>
+              <th>Файл</th>
+              <th>Розмір</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="fileName">—</td>
+              <td id="fileSize">—</td>
+              <td id="fileStatus">Очікується файл</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="hint">Другий сайт відкриває дані моментально у газетному стилі.</p>
     </section>
 
     <section id="newsGrid" class="news-grid">

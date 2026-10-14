@@ -1,44 +1,92 @@
+const STORAGE_KEY = 'excelNewsPayloadV1';
+
 const fileInput = document.getElementById('excelFile');
 const exportBtn = document.getElementById('exportBtn');
+const openSecondBtn = document.getElementById('openSecondBtn');
 const newsGrid = document.getElementById('newsGrid');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const fileStatus = document.getElementById('fileStatus');
 
 let currentRows = [];
+let currentPayload = null;
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
 
+  fileName.textContent = file.name;
+  fileSize.textContent = formatFileSize(file.size);
+  fileStatus.textContent = 'Обробка...';
+
   const reader = new FileReader();
 
   reader.onload = ({ target }) => {
-    const buffer = target?.result;
-    const workbook = XLSX.read(buffer, { type: 'array' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+    try {
+      const buffer = target?.result;
+      const workbook = XLSX.read(buffer, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-    currentRows = rows;
-    exportBtn.disabled = !rows.length;
-    renderRows(rows);
+      currentRows = rows;
+      currentPayload = {
+        createdAt: new Date().toISOString(),
+        sourceFile: {
+          name: file.name,
+          size: file.size,
+          lastModified: file.lastModified,
+        },
+        rows,
+      };
+
+      exportBtn.disabled = !rows.length;
+      openSecondBtn.disabled = !rows.length;
+      fileStatus.textContent = rows.length ? `Готово: ${rows.length} записів` : 'Файл порожній';
+      savePayload(currentPayload);
+      renderRows(rows);
+    } catch {
+      currentRows = [];
+      currentPayload = null;
+      exportBtn.disabled = true;
+      openSecondBtn.disabled = true;
+      fileStatus.textContent = 'Помилка читання XLSX';
+      newsGrid.innerHTML = '<article class="empty-state">Не вдалося прочитати XLSX-файл.</article>';
+    }
   };
 
   reader.readAsArrayBuffer(file);
 });
 
-exportBtn.addEventListener('click', () => {
+openSecondBtn.addEventListener('click', () => {
   if (!currentRows.length) return;
+  window.location.href = './second.html';
+});
 
-  const payload = {
-    createdAt: new Date().toISOString(),
-    rows: currentRows,
-  };
+exportBtn.addEventListener('click', () => {
+  if (!currentPayload?.rows?.length) return;
 
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(currentPayload, null, 2)], { type: 'application/json' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'news.exeshnik';
   link.click();
   URL.revokeObjectURL(link.href);
 });
+
+function savePayload(payload) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function formatFileSize(bytes) {
+  if (!bytes) return '0 B';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 function renderRows(rows) {
   newsGrid.innerHTML = '';
@@ -92,9 +140,7 @@ function renderRows(rows) {
 
 function findKey(keys, candidates) {
   const lowered = keys.map((key) => ({ original: key, lowered: key.toLowerCase() }));
-  const match = lowered.find(({ lowered }) =>
-    candidates.some((candidate) => lowered.includes(candidate))
-  );
+  const match = lowered.find(({ lowered }) => candidates.some((candidate) => lowered.includes(candidate)));
   return match?.original;
 }
 

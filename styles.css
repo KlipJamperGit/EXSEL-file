@@ -5,6 +5,9 @@
   --ink: #1f1f1f;
   --accent: #8b2f1c;
   --line: #d8ccb3;
+  --manager-bg: #f4f7fb;
+  --manager-head: #e2e9f5;
+  --manager-border: #c2cde2;
 }
 
 * {
@@ -32,9 +35,23 @@ body {
 }
 
 .controls {
-  max-width: 960px;
+  max-width: 1040px;
   margin: 1.5rem auto;
   padding: 1rem;
+}
+
+.controls.file-manager {
+  border: 1px solid var(--manager-border);
+  border-radius: 8px;
+  background: var(--manager-bg);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .file-label,
@@ -43,13 +60,8 @@ body {
   padding: 0.65rem 1rem;
   border: 1px solid var(--ink);
   background: var(--paper);
-  margin-bottom: 0.75rem;
   font-family: inherit;
   cursor: pointer;
-}
-
-.action-btn {
-  margin-left: 0.5rem;
 }
 
 .action-btn:disabled {
@@ -62,6 +74,30 @@ body {
   display: block;
   width: 100%;
   max-width: 450px;
+}
+
+.file-list-wrap {
+  overflow-x: auto;
+}
+
+.file-list {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--manager-border);
+}
+
+.file-list th,
+.file-list td {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--manager-border);
+  font-size: 0.95rem;
+}
+
+.file-list th {
+  background: var(--manager-head);
+  font-weight: 700;
 }
 
 .hint {
