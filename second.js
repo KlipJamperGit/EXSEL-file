@@ -51,13 +51,15 @@ function renderRows(rows) {
     });
 
     if (urlKey && row[urlKey]) {
-      const link = document.createElement('a');
       const cleanUrl = normalizeUrl(String(row[urlKey]));
-      link.href = cleanUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = cleanUrl;
-      card.appendChild(link);
+      if (cleanUrl) {
+        const link = document.createElement('a');
+        link.href = cleanUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = cleanUrl;
+        card.appendChild(link);
+      }
     }
 
     newsGrid.appendChild(card);
@@ -74,8 +76,15 @@ function findKey(keys, candidates) {
 
 function normalizeUrl(value) {
   const trimmed = value.trim();
-  if (/^https?:\/\//i.test(trimmed)) return trimmed;
-  return `https://${trimmed}`;
+  const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const url = new URL(candidate);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return '';
+    return url.toString();
+  } catch {
+    return '';
+  }
 }
 
 function isImageLike(key, value) {
