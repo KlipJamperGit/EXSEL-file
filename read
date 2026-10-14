@@ -1,3 +1,5 @@
-1. Відкрийте файл /home/runner/work/EXSEL-file/EXSEL-file/index.html у браузері.
-2. Оберіть Excel-файл (.xlsx/.xls) зі списком сайтів.
-3. Дані автоматично відобразяться у вигляді газетних карток.
+1. Перший сайт: відкрийте /home/runner/work/EXSEL-file/EXSEL-file/index.html
+2. Завантажте Excel (.xlsx/.xls) — дані покажуться як газетні картки без відображення картинок.
+3. Натисніть «Завантажити exeshnik», щоб зберегти файл для другого сайту.
+4. Другий сайт: відкрийте /home/runner/work/EXSEL-file/EXSEL-file/second.html
+5. Завантажте файл news.exeshnik — він відобразиться як газета.

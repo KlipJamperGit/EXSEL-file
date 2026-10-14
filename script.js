@@ -1,5 +1,8 @@
 const fileInput = document.getElementById('excelFile');
+const exportBtn = document.getElementById('exportBtn');
 const newsGrid = document.getElementById('newsGrid');
+
+let currentRows = [];
 
 fileInput.addEventListener('change', (event) => {
   const file = event.target.files?.[0];
@@ -13,10 +16,28 @@ fileInput.addEventListener('change', (event) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
+    currentRows = rows;
+    exportBtn.disabled = !rows.length;
     renderRows(rows);
   };
 
   reader.readAsArrayBuffer(file);
+});
+
+exportBtn.addEventListener('click', () => {
+  if (!currentRows.length) return;
+
+  const payload = {
+    createdAt: new Date().toISOString(),
+    rows: currentRows,
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'news.exeshnik';
+  link.click();
+  URL.revokeObjectURL(link.href);
 });
 
 function renderRows(rows) {
@@ -36,13 +57,14 @@ function renderRows(rows) {
     card.className = 'news-card';
 
     const title = document.createElement('h2');
-    title.textContent = String(row[titleKey] || `Запис ${index + 1}`);
+    const rawTitle = String(row[titleKey] || '').trim();
+    title.textContent = rawTitle && !isImageLike(titleKey, rawTitle) ? rawTitle : `Запис ${index + 1}`;
     card.appendChild(title);
 
     keys.forEach((key) => {
       if (key === titleKey || key === urlKey) return;
       const value = String(row[key] ?? '').trim();
-      if (!value) return;
+      if (!value || isImageLike(key, value)) return;
 
       const line = document.createElement('p');
       line.innerHTML = `<strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}`;
@@ -75,6 +97,14 @@ function normalizeUrl(value) {
   const trimmed = value.trim();
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
   return `https://${trimmed}`;
+}
+
+function isImageLike(key, value) {
+  const keyLower = String(key).toLowerCase();
+  if (keyLower.includes('image') || keyLower.includes('img') || keyLower.includes('картин')) return true;
+
+  const valueLower = String(value).toLowerCase();
+  return /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(valueLower);
 }
 
 function escapeHtml(value) {

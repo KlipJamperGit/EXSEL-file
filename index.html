@@ -10,14 +10,16 @@
 <body>
   <header class="hero">
     <h1>Excel → Онлайн-газета</h1>
-    <p>Завантаж Excel-файл зі списком сайтів і переглядай дані у вигляді газетних карток.</p>
+    <p>Завантаж Excel-файл, переглянь як газету і збережи у форматі exeshnik.</p>
   </header>
 
   <main>
     <section class="controls">
       <label for="excelFile" class="file-label">Оберіть .xlsx/.xls файл</label>
       <input id="excelFile" type="file" accept=".xlsx,.xls" />
+      <button id="exportBtn" class="action-btn" type="button" disabled>Завантажити exeshnik</button>
       <p class="hint">Порада: перший рядок має містити назви колонок (наприклад: Назва, Сайт, Опис).</p>
+      <p class="hint">Другий сайт: <a href="./second.html">second.html</a></p>
     </section>
 
     <section id="newsGrid" class="news-grid">
